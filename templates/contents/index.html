@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{url_for('static', filename='img/manage.png')}}">
+    <title>🦈 | dashboard | {% block title %}{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com/"></script>
+</head>
+
+<body class="bg-gray-800">
+    <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
+
+    <div class="flex">
+        <div>
+            <button id="dropdownNavbarLink" data-dropdown-toggle="server_dropdownNavbar"
+                class="flex py-2 pl-3 pr-4 font-medium text-gray-700 rounded md:flex lg:hidden xl:hidden hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">サーバー選択
+                <svg class="w-5 h-5 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd"></path>
+                </svg></button>
+            <!-- Dropdown menu -->
+            <div id="server_dropdownNavbar"
+                class="z-10 hidden w-64 pb-4 font-normal bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
+                <ul class="py-1 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+
+                    {% for guild_data in guilds %}
+                    <!--管理サメ-->
+                    <li>
+                        <div class="flex">
+                            <div
+                                class="w-12 h-12 mb-2 overflow-hidden bg-gray-100 rounded-full shadow-lg md:w-32 md:h-32 md:mb-4">
+                                <a href="/dashboard/{{ guild_data['guild_id'] }}">
+                                    <img src="{{ guild_data['icon'] }}"
+                                        class="border border-double rounded-full border-sky-500">
+                                </a>
+                            </div>
+                            <div>
+                                <a href="/dashboard/{{ guild_data['guild_id'] }}">
+
+                                    {% if not guild_data.guild_name %}
+                                    {% set guild_name = "キャッシュ中" %}
+                                    {% else %}
+                                    {% set guild_name = guild_data.guild_name %}
+                                    {% endif %}
+
+                                    <p class="mt-2 ml-8 text-2xl text-white">{{guild_name}}</p>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+
+        <div>
+            <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"
+                class="flex py-2 pl-3 pr-4 font-medium text-gray-700 rounded md:flex lg:hidden xl:hidden hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">機能選択
+                <svg class="w-5 h-5 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd"></path>
+                </svg></button>
+            <!-- Dropdown menu -->
+            <div id="dropdownNavbar"
+                class="z-10 hidden w-64 pb-4 font-normal bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
+                <ul class="py-1 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+
+                    <!--管理サメ-->
+                    <li>
+                        <button type="button"
+                            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            aria-controls="manage_drop" data-collapse-toggle="mob_manage_drop">
+                            <img class="rounded-full""" src="{{url_for('static', filename='img/manage.png')}}"
+                                width="50" height="50">
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="">管理サメ</span>
+                            <svg sidebar-toggle-item="" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <ul id="mob_manage_drop" class="hidden py-2 space-y-2">
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/base_setting"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    基本設定
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/module"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    モジュール
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    オートリアクション
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    VC接続時間
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    メッセージ転載
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/log"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    ログ
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!--裏サメ-->
+                    <li>
+                        <button type="button"
+                            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            aria-controls="back_drop" data-collapse-toggle="mob_back_drop">
+                            <img class="rounded-full""" src="{{url_for('static', filename='img/back.png')}}" width="50"
+                                height="50">
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="">裏サメ</span>
+                            <svg sidebar-toggle-item="" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <ul id="mob_back_drop" class="hidden py-2 space-y-2">
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/back_two"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">裏2ショット</a>
+                            </li>
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/back_recruit"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">裏募集</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <!--イベントサメ-->
+                    <li>
+                        <button type="button"
+                            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            aria-controls="event_drop" data-collapse-toggle="mob_event_drop">
+                            <img class="rounded-full""" src="{{url_for('static', filename='img/event.png')}}" width="50"
+                                height="50">
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="">イベントサメ</span>
+                            <svg sidebar-toggle-item="" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <ul id="mob_event_drop" class="hidden py-2 space-y-2">
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/event_panel"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    イベントパネル
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    VC接続人数
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    その他のイベント系
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <!--カウンターサメ-->
+                    <li>
+                        <button type="button"
+                            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            aria-controls="counter_drop" data-collapse-toggle="mob_counter_drop">
+                            <img class="rounded-full""" src="{{url_for('static', filename='img/counter.png')}}"
+                                width="50" height="50">
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="">カウンターサメ</span>
+                            <svg sidebar-toggle-item="" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <ul id="mob_counter_drop" class="hidden py-2 space-y-2">
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/stats"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    カウンター
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    オートチャンネル
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="flex">
+
+        <div class="hidden h-full px-4 border-r w-72 md:block">
+            <div class="justify-between h-full mt-6">
+
+                <aside aria-label="Sidebar" class="h-full">
+                    <div class="px-3 pt-4 rounded">
+                        <ul class="space-y-2">
+                            <li>
+                                <a href="/docs" target="_blank" rel="noopener noreferrer"
+                                    class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <svg aria-hidden="true"
+                                        class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                                        <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                                    </svg>
+                                    <span class="ml-3">ヘルプへ</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/paid/{{ guild.id }}" target="_blank" rel="noopener noreferrer"
+                                    class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <svg aria-hidden="true"
+                                        class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                                        <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                                    </svg>
+                                    <span class="ml-3">有料プラン申し込み</span>
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <button type="button"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                                    aria-controls="server_select_drop" data-collapse-toggle="server_select_drop">
+
+                                    <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                                        sidebar-toggle-item="">サーバー選択</span>
+                                    <svg sidebar-toggle-item="" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                                <ul id="server_select_drop" class="hidden py-2 space-y-2">
+                                    {% for guild_data in guilds %}
+
+                                    {% if not guild_data.guild_name %}
+                                    {% set guild_name = "キャッシュ中" %}
+                                    {% else %}
+                                    {% set guild_name = guild_data.guild_name %}
+                                    {% endif %}
+
+                                    <li>
+                                        <div class="flex">
+                                            {% if guild_name|length < 10 %} <div
+                                                class="w-12 h-12 mb-2 overflow-hidden bg-gray-100 rounded-full shadow-lg md:mb-4">
+                                                <a href="/dashboard/{{ guild_data['guild_id'] }}">
+                                                    <img src="{{ guild_data['icon'] }}"
+                                                        class="border border-double rounded-full border-sky-500">
+                                                </a>
+                                        </div>
+
+                                        <div>
+                                            <a href="/dashboard/{{ guild_data['guild_id'] }}">
+
+
+                                                <p class="mt-2 ml-8 text-lg text-white">{{guild_name}}</p>
+                                            </a>
+                                        </div>
+
+                                        {% else %}
+                                        <div
+                                            class="w-12 h-12 mb-2 overflow-hidden bg-gray-100 rounded-full shadow-lg md:mb-4">
+                                            <a href="/dashboard/{{ guild_data['guild_id'] }}">
+                                                <img src="{{ guild_data['icon'] }}"
+                                                    class="border border-double rounded-full border-sky-500">
+                                            </a>
+                                        </div>
+
+                                        <div>
+                                            <a href="/dashboard/{{ guild_data['guild_id'] }}">
+
+
+                                                <p class="mt-4 ml-8 text-xs text-white">{{guild_name}}</p>
+                                            </a>
+                                        </div>
+
+                                        {% endif %}
+                    </div>
+                    </li>
+                    {% endfor %}
+
+                    </ul>
+                    </li>
+
+
+                    <!--管理サメ-->
+                    <li>
+                        <button type="button"
+                            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            aria-controls="manage_drop" data-collapse-toggle="manage_drop">
+                            <img class="rounded-full""" src="{{url_for('static', filename='img/manage.png')}}"
+                                width="50" height="50">
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="">管理サメ</span>
+                            <svg sidebar-toggle-item="" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <ul id="manage_drop" class="hidden py-2 space-y-2">
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/base_setting"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    基本設定
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/module"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    モジュール
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    オートリアクション
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    VC接続時間
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    メッセージ転載
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/log"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    ログ
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!--裏サメ-->
+                    <li>
+                        <button type="button"
+                            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            aria-controls="back_drop" data-collapse-toggle="back_drop">
+                            <img class="rounded-full""" src="{{url_for('static', filename='img/back.png')}}" width="50"
+                                height="50">
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="">裏サメ</span>
+                            <svg sidebar-toggle-item="" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <ul id="back_drop" class="hidden py-2 space-y-2">
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/back_two"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">裏2ショット</a>
+                            </li>
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/back_recruit"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">裏募集</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <!--イベントサメ-->
+                    <li>
+                        <button type="button"
+                            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            aria-controls="event_drop" data-collapse-toggle="event_drop">
+                            <img class="rounded-full""" src="{{url_for('static', filename='img/event.png')}}" width="50"
+                                height="50">
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="">イベントサメ</span>
+                            <svg sidebar-toggle-item="" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <ul id="event_drop" class="hidden py-2 space-y-2">
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/event_panel"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    イベントパネル
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    VC接続人数
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    その他のイベント系
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <!--カウンターサメ-->
+                    <li>
+                        <button type="button"
+                            class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            aria-controls="counter_drop" data-collapse-toggle="counter_drop">
+                            <img class="rounded-full""" src="{{url_for('static', filename='img/counter.png')}}"
+                                width="50" height="50">
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="">カウンターサメ</span>
+                            <svg sidebar-toggle-item="" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <ul id="counter_drop" class="hidden py-2 space-y-2">
+                            <li>
+                                <a href="/dashboard/{{guild.id}}/stats"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    カウンター
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#"
+                                    class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                    オートチャンネル
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+                    </ul>
+            </div>
+            </aside>
+
+
+        </div>
+    </div>
+
+
+    <div class="w-full h-full ">
+        <div class="items-center justify-center mt-10 ml-4">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </div>
+    </div>
+
+</body>
+
+</html>
