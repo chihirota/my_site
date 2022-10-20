@@ -1,0 +1,200 @@
+{% extends "contents/index.html" %}
+{% block body %}
+
+<h1 class="text-white">デモはこのページのみ作成しています！</h1>
+<h1 class="text-white">サイドバー内のコンテンツにアクセスするにはログイン必須です</h1>
+
+<div class="py-6 -none sm:py-8 lg:py-12">
+    <div class="max-w-screen-xl px-4 mx-auto md:px-8">
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 lg:gap-x-8 gap-y-8 lg:gap-y-12">
+            <!-- person - start -->
+
+            {% for name, data in datas.items() %}
+
+
+            <div class="items-center flex-none">
+                <div class="w-64 p-6 border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex">
+                        <h5 class="mb-2 mr-4 text-2xl font-bold tracking-tight text-gray-900 -1 dark:text-white">
+                            {%for n in name %}{{ n }}{% endfor %}
+                        </h5>
+
+                        <label for="{{ name }}" class="relative items-center mt-1 cursor-pointer inline- -1">
+                            {% if data.enable %}
+                            <input type="checkbox" value="" id="{{ name }}" class="sr-only peer" checked>
+                            {% else %}
+                            <input type="checkbox" value="" id="{{ name }}" class="sr-only peer">
+                            {% endif %}
+                            <div
+                                class="mb-8 w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600">
+                            </div>
+                        </label>
+
+                    </div>
+
+                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{
+                        data.desc}}<br><br>右上にある、丸い白いのを右にするとログが有効化され、左にすると無効化されます。
+                    </p>
+
+                    <label for="{{ name }}_text_id" class="block text-sm font-medium text-gray-900 dark:text-gray-300">
+                        ログを出力するTCのID
+                    </label>
+                    <select name="{{ name }}_text_id" id="{{ name }}_text_id"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                        <option value="0" selected>未設定</option>
+
+                        {% for tc in tcs %}
+
+                        {% if tc == name %}
+
+                        <option value="{{ tc }}" selected>{{ tc }}</option>
+                        {% else %}
+                        <option value="{{ tc }}">{{ tc }}</option>
+                        {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function godashboard() {
+            guild_id = "{{ guild_id }}"
+
+            window.location.href = `/dashboard/${guild_id}`;
+        }
+
+        vc_join = document.getElementById("VC入室");
+        vc_join_text_id = document.getElementById("VC入室_text_id");
+        vc_leave = document.getElementById("VC退室");
+        vc_leave_text_id = document.getElementById("VC退室_text_id");
+        vc_move = document.getElementById("VC移動");
+        vc_move_text_id = document.getElementById("VC移動_text_id");
+
+        server_join = document.getElementById("サーバー入室");
+        server_join_text_id = document.getElementById("サーバー入室_text_id");
+        server_leave = document.getElementById("サーバー退室");
+        server_leave_text_id = document.getElementById("サーバー退室_text_id");
+
+        message_delete = document.getElementById("メッセージ削除");
+        message_delete_text_id = document.getElementById("メッセージ削除_text_id");
+        message_edit = document.getElementById("メッセージ編集");
+        message_edit_text_id = document.getElementById("メッセージ編集_text_id");
+
+        channel_create = document.getElementById("チャンネル作成");
+        channel_create_text_id = document.getElementById("チャンネル作成_text_id");
+        channel_delete = document.getElementById("チャンネル削除");
+        channel_delete_text_id = document.getElementById("チャンネル削除_text_id");
+
+        user_ban = document.getElementById("ユーザーBAN");
+        user_ban_text_id = document.getElementById("ユーザーBAN_text_id");
+        bot_info = document.getElementById("BOTINFO");
+        bot_info_text_id = document.getElementById("BOTINFO_text_id");
+
+        vc_join.onchange = function () {
+            console.log("result vc join: ", vc_join.checked);
+
+            save("VC入室", vc_join.checked);
+        }
+
+        vc_join_text_id.onchange = function () {
+            console.log("result vc join text: ", vc_join_text_id.value);
+
+            save_channel_id("VC入室", vc_join_text_id.value);
+        }
+
+        vc_leave.onchange = function () {
+            console.log("result vc leave: ", vc_join.checked);
+
+            save("VC退室", vc_leave.checked);
+        }
+
+        vc_leave_text_id.onchange = function () {
+            save_channel_id("VC退室", vc_leave_text_id.value);
+        }
+
+        vc_move.onchange = function () {
+            save("VC移動", vc_move.checked);
+        }
+
+        vc_move_text_id.onchange = function () {
+            save_channel_id("VC移動", vc_move_text_id.value);
+        }
+
+        server_join.onchange = function () {
+            save("サーバー入室", server_join.checked);
+        }
+
+        server_join_text_id.onchange = function () {
+            save_channel_id("サーバー入室", server_join_text_id.value);
+        }
+
+        server_leave.onchange = function () {
+            save("サーバー退室", server_leave.checked);
+        }
+
+        server_leave_text_id.onchange = function () {
+            save_channel_id("サーバー退室", server_leave_text_id.value);
+        }
+
+        message_delete.onchange = function () {
+            save("メッセージ削除", message_delete.checked);
+        }
+
+        message_delete_text_id.onchange = function () {
+            save_channel_id("メッセージ削除", message_delete_text_id.value);
+        }
+
+        message_edit.onchange = function () {
+            save("メッセージ編集", message_edit.checked);
+        }
+
+        message_edit_text_id.onchange = function () {
+            save_channel_id("メッセージ編集", message_edit_text_id.value);
+        }
+
+
+        channel_create.onchange = function () {
+            save("チャンネル作成", channel_create.checked);
+        }
+
+        channel_create_text_id.onchange = function () {
+            save_channel_id("チャンネル作成", channel_create_text_id.value);
+        }
+
+        channel_delete.onchange = function () {
+            save("チャンネル削除", channel_delete.checked);
+        }
+
+        channel_delete_text_id.onchange = function () {
+            save_channel_id("チャンネル削除", channel_delete_text_id.value);
+        }
+
+        user_ban.onchange = function () {
+            save("ユーザーBAN", user_ban.checked);
+        }
+
+        user_ban_text_id.onchange = function () {
+            save_channel_id("ユーザーBAN", user_ban_text_id.value);
+        }
+
+        bot_info.onchange = function () {
+            save("BOTINFO", bot_info.checked);
+        }
+
+        bot_info_text_id.onchange = function () {
+            save_channel_id("BOTINFO", bot_info_text_id.value);
+        }
+
+
+
+
+
+    </script>
+
+    {% endblock %}
